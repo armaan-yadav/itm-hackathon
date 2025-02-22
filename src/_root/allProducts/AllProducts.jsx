@@ -33,7 +33,7 @@ const AllProducts = () => {
   );
 
   const renderProducts = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {products.map((product, index) => {
         if (products.length === index + 1) {
           return (
@@ -60,7 +60,7 @@ const AllProducts = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 h-screen">
       <h1 className="text-3xl font-bold mb-8 text-center">
         Fresh Veggies/Fruits, Direct from Farmers
       </h1>
@@ -69,11 +69,9 @@ const AllProducts = () => {
         ? renderShimmerGrid()
         : renderProducts()}
 
-      {!hasMore && products.length > 0 && (
-        <p className="text-center text-gray-500 mt-8">
-          No more products to load
-        </p>
-      )}
+      {/* {!hasMore && products.length > 0 && (
+        <span className="text-center text-gray-500 mt-8">No more loads</span>
+      )} */}
     </div>
   );
 };

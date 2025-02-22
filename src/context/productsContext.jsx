@@ -44,8 +44,6 @@ export const ProductsProvider = ({ children }) => {
     return products.find((product) => product.id === id) || null;
   };
 
-  console.log(products);
-
   return (
     <productsContext.Provider
       value={{ products, loading, hasMore, setPage, getProductById }}

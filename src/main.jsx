@@ -6,7 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./context/userContext";
 import { LoadingProvider } from "./context/loadingContext";
 import { ProductsProvider } from "./context/productsContext";
-import { OrdersProvider } from "./context/OrderContext";
+import { OrdersProvider } from "./context/orderContext";
+import { LandContextProvider } from "./context/landContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -15,7 +16,9 @@ createRoot(document.getElementById("root")).render(
         <UserProvider>
           <ProductsProvider>
             <OrdersProvider>
-              <App />
+              <LandContextProvider>
+                <App />
+              </LandContextProvider>
             </OrdersProvider>
           </ProductsProvider>
         </UserProvider>

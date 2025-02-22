@@ -5,22 +5,22 @@ const steps = [
   {
     number: "01",
     title: "Create Account",
-    description: "Sign up for free and complete your verification process"
+    description: "Sign up for free and complete your verification to get started."
   },
   {
     number: "02",
-    title: "Choose Investment",
-    description: "Browse through various agricultural investment opportunities"
+    title: "Browse Land & Resources",
+    description: "Explore available land for lease, farming tools, and resources."
   },
   {
     number: "03",
-    title: "Invest Securely",
-    description: "Make your investment using our secure payment system"
+    title: "Lease Land & Purchase Products",
+    description: "Securely lease land or purchase farming tools through our platform."
   },
   {
     number: "04",
-    title: "Track Progress",
-    description: "Monitor your investment growth in real-time"
+    title: "Manage Your Farm Operations",
+    description: "Easily oversee your land, crops, and direct sales through the platform."
   }
 ];
 
@@ -35,10 +35,10 @@ const HowItWorksSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            How Farmvest Works
+            किसान सारथी से जुड़े सिर्फ 4 स्टेप्स में 
           </h2>
           <p className="text-xl text-gray-600">
-            Get started with agricultural investment in four simple steps
+          Get Started with Farming Solutions in Four Simple Steps
           </p>
         </motion.div>
 

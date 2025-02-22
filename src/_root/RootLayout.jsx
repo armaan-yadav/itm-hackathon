@@ -6,7 +6,7 @@ const RootLayout = () => {
   return (
     <div className="w-full">
       <Navbar />
-      <main>
+      <main className="min-h-screen">
         <Outlet />
       </main>
       <Footer />

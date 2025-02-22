@@ -3,25 +3,25 @@ import { motion } from 'framer-motion';
 
 const features = [
   {
-    title: "Real-time Monitoring",
-    description: "Track your investments and farming projects in real-time with our advanced monitoring system.",
+    title: "Efficient Land Utilization",
+    description: "Convert idle land into productive farmland, benefiting both landowners and farmers.",
     icon: "📊"
   },
   {
-    title: "Secure Investment",
-    description: "Your investments are secured with our bank-grade security systems and insurance coverage.",
+    title: "Direct Sales",
+    description: "Farmers sell directly to consumers, ensuring fair prices and higher profits.",
     icon: "🔒"
   },
   {
-    title: "Expert Support",
-    description: "Get support from our team of agricultural and investment experts 24/7.",
+    title: "Access to Resources",
+    description: "A one-stop shop for seeds, fertilizers, and cutting-edge farming tools.",
     icon: "👥"
   },
   {
-    title: "High Returns",
-    description: "Earn competitive returns on your agricultural investments with minimal risk.",
-    icon: "💰"
-  }
+    title: "Farmer Empowerment",
+    description: "Farmers gain control over their business, with access to land, resources, and better market opportunities.",
+    icon: "👥"
+  },
 ];
 
 const FeaturesSection = () => {
@@ -35,19 +35,19 @@ const FeaturesSection = () => {
             transition={{ duration: 0.6 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            Why Choose Farmvest?
+            किसान सारथी क्यों चुने ?  
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-600"
+            className="text-xl text-gray-600 m-auto w-[65%]"
           >
-            We provide the best features to make your agricultural investment journey smooth and profitable
+            At Kisaan Sarthi, we connect landowners, farmers, and consumers in a streamlined ecosystem. Our platform empowers farmers with direct access to land, resources, and markets, while ensuring landowners earn passive income. We eliminate middlemen, creating a transparent and efficient agricultural process.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
