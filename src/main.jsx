@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./context/userContext";
 import { LoadingProvider } from "./context/loadingContext";
 import { ProductsProvider } from "./context/productsContext";
-import { OrdersProvider } from "./context/orderContext.jsx";
+import { OrdersProvider } from "./context/orderContext";
 import { LandContextProvider } from "./context/landContext";
 
 createRoot(document.getElementById("root")).render(

@@ -9,11 +9,11 @@ import WeatherWidget from "@/components/shared/Weather";
 const HomePage = () => {
   return (
     <div className="min-h-screen">
+      {/* <WeatherWidget /> */}
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
       <ChatWidget />
-      <WeatherWidget />
       <CTASection />
     </div>
   );
