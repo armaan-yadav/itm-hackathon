@@ -1,8 +1,8 @@
 // MyOrders.js
+import OrderCard from "@/components/shared/OrderCard";
 import { userContext } from "@/context/userContext";
 import { orderServices } from "@/services/orderServices";
 import { useContext, useEffect, useState } from "react";
-import OrderCard from "@/components/shared/OrderCard";
 
 const MyOrders = () => {
   const { user } = useContext(userContext);
@@ -59,8 +59,7 @@ const MyOrders = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {orders.map((order) => (
-        <OrderCard key={order.$id} order={order} />
-
+            <OrderCard key={order.$id} order={order} />
           ))}
         </div>
       </div>

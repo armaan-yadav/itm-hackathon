@@ -46,9 +46,12 @@ const ProductCard = ({
         </CardContent>
 
         <CardFooter className="p-4 pt-0">
-          <Button className="w-full gap-2" disabled={quantity === 0}>
+          <Button
+            className="w-full gap-2 bg-green-600 hover:bg-green-700"
+            disabled={quantity === 0}
+          >
             <ShoppingCart className="w-4 h-4" />
-            Add to Cart
+            Buy Now
           </Button>
         </CardFooter>
       </Card>

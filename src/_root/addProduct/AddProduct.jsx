@@ -10,6 +10,7 @@ import { productServices } from "@/services/productServices";
 import { storageServices } from "@/services/storageServices";
 import { useContext, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, UploadCloud } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const [files, setFiles] = useState([]);
@@ -26,6 +27,7 @@ const AddProduct = () => {
   const [description, setDescription] = useState("");
   const { user } = useContext(userContext);
   const [step, setStep] = useState(1);
+  const navigator = useNavigate();
 
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -94,9 +96,9 @@ const AddProduct = () => {
       };
 
       console.log("Product data:", data);
-
       await productServices.addProduct({ product: data });
       useToast("Grocery added successfully");
+      navigator("/all-products");
 
       setFiles([]);
       previewUrls.forEach((url) => URL.revokeObjectURL(url));

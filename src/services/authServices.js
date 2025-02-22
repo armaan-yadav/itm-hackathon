@@ -1,6 +1,5 @@
-import { appwriteConfig } from "@/lib/appwrite/appwrite";
-import { Account, ID } from "appwrite";
 import { client } from "@/lib/appwrite/appwrite";
+import { Account, ID } from "appwrite";
 import { AuthError } from "./error/error";
 class AuthServices {
   client;
@@ -24,6 +23,7 @@ class AuthServices {
       throw AuthError.fromAppwriteError(error);
     }
   }
+
   //* VERIFY OTP
   async verifyOTP({ userId, otp }) {
     try {

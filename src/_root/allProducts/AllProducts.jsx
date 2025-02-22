@@ -25,7 +25,7 @@ const AllProducts = () => {
   );
 
   const renderShimmerGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
       {[...Array(5)].map((_, index) => (
         <ProductCardShimmer key={`shimmer-${index}`} />
       ))}
@@ -33,7 +33,7 @@ const AllProducts = () => {
   );
 
   const renderProducts = () => (
-    <div className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
       {products.map((product, index) => {
         if (products.length === index + 1) {
           return (
@@ -60,8 +60,8 @@ const AllProducts = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8 h-screen">
-      <h1 className="text-3xl font-bold mb-8 text-center">
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
         Fresh Veggies/Fruits, Direct from Farmers
       </h1>
 

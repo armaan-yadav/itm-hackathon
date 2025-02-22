@@ -47,8 +47,8 @@ const Navbar = () => {
             >
               Services
             </Link>
-            <Link
-              to="/about"
+            {/* <Link
+              to="/"
               className={`text-sm font-medium ${
                 location.pathname === "/about"
                   ? "text-green-600"
@@ -56,7 +56,7 @@ const Navbar = () => {
               }`}
             >
               About
-            </Link>
+            </Link> */}
 
             {/* Conditionally Render Profile & Logout if User is Logged In */}
             {user ? (

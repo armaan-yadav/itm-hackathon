@@ -3,7 +3,7 @@ import { userContext } from "@/context/userContext";
 import { orderServices } from "@/services/orderServices";
 import { productServices } from "@/services/productServices";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PlaceOrder = () => {
   const { productId, quantity } = useParams();
@@ -11,6 +11,7 @@ const PlaceOrder = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useContext(userContext);
+  const navigator = useNavigate();
 
   const getProduct = async () => {
     try {
@@ -43,6 +44,7 @@ const PlaceOrder = () => {
 
     await orderServices.placeOrder({ order: data });
     console.log("placed");
+    navigator("/my-orders");
     console.log(data);
   };
 

@@ -10,19 +10,19 @@ import { OrdersProvider } from "./context/orderContext";
 import { LandContextProvider } from "./context/landContext";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <LoadingProvider>
-        <UserProvider>
-          <ProductsProvider>
-            <OrdersProvider>
-              <LandContextProvider>
-                <App />
-              </LandContextProvider>
-            </OrdersProvider>
-          </ProductsProvider>
-        </UserProvider>
-      </LoadingProvider>
-    </BrowserRouter>
-  </StrictMode>
+  // <StrictMode>
+  <BrowserRouter>
+    <LoadingProvider>
+      <UserProvider>
+        <ProductsProvider>
+          <OrdersProvider>
+            <LandContextProvider>
+              <App />
+            </LandContextProvider>
+          </OrdersProvider>
+        </ProductsProvider>
+      </UserProvider>
+    </LoadingProvider>
+  </BrowserRouter>
+  // </StrictMode>
 );
