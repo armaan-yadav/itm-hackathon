@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { userContext } from "@/context/userContext";
-import { availabilityStatus, quantityUnits } from "@/lib/utils";
+import { availabilityStatus, quantityUnits, useToast } from "@/lib/utils";
 import { productServices } from "@/services/productServices";
 import { storageServices } from "@/services/storageServices";
 import { useContext, useEffect, useState } from "react";
@@ -96,6 +96,7 @@ const AddProduct = () => {
       console.log("Product data:", data);
 
       await productServices.addProduct({ product: data });
+      useToast("Grocery added successfully");
 
       setFiles([]);
       previewUrls.forEach((url) => URL.revokeObjectURL(url));

@@ -61,7 +61,7 @@ const Navbar = () => {
             {/* Conditionally Render Profile & Logout if User is Logged In */}
             {user ? (
               <>
-                <Link
+                {/* <Link
                   to="/profile"
                   className={`text-sm font-medium ${
                     location.pathname === "/profile"
@@ -70,7 +70,7 @@ const Navbar = () => {
                   }`}
                 >
                   Profile
-                </Link>
+                </Link> */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

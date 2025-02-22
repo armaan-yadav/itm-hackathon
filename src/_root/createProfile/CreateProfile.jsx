@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { userContext } from "@/context/userContext";
-import { convertToPlainNumber } from "@/lib/utils";
+import { convertToPlainNumber, useToast } from "@/lib/utils";
 import { userServices } from "@/services/userServices";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -53,6 +53,7 @@ const CreateProfile = () => {
 
     await userServices.addUserIntoDb({ data });
     setIsLoading(false);
+    useToast("Profile created successfully");
     navigate("/");
   };
 
@@ -60,9 +61,8 @@ const CreateProfile = () => {
     <>
       <section
         className="relative min-h-screen flex items-center bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/profile-bg.jpg')" }} // Update with actual image path
+        style={{ backgroundImage: "url('/images/profile-bg.jpg')" }}
       >
-        {/* <div className="absolute inset-0 bg-black bg-opacity-10"></div> */}
         <div className="h-screen w-screen flex items-center justify-center">
           <div className="w-[30rem] p-8 bg-white rounded-lg shadow-lg flex flex-col gap-4">
             <h2 className="text-2xl font-semibold text-center text-gray-800">

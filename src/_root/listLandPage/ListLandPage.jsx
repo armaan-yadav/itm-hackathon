@@ -147,7 +147,6 @@ const ListLandPage = () => {
 
       await landServices.addLand({ land: finalFormData });
       useToast("Land listed successfully!", 2000);
-
       setFiles([]);
       previewUrls.forEach((url) => URL.revokeObjectURL(url));
       setPreviewUrls([]);

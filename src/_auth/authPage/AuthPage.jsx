@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "/images/brand-logo.png";
 import { FaPhone, FaKey } from "react-icons/fa"; // Icons for phone and OTP
+import { useToast } from "@/lib/utils";
 
 const slogans = [
   "Growing Smarter, Farming Better! 🌱🚜",
@@ -35,6 +36,7 @@ const AuthPage = () => {
   const sendOtp = async () => {
     const userId = await authServices.sendOTP({ phoneNumber });
     setOtpSent(true);
+    useToast("OTP sent successfully");
     setUserId(userId);
   };
 
