@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { userContext } from "../../context/userContext";
-import brandLogo from "/images/brand-logo.png"; 
+import brandLogo from "/images/brand-logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,15 +11,12 @@ const Navbar = () => {
 
   const handleLogout = () => {
     removeUser();
-    console.log(user)
-    // Additional logout logic (e.g., redirect, API call) if needed
   };
 
   return (
     <nav className="w-full z-50 bg-white/80 backdrop-blur-md shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -33,7 +30,9 @@ const Navbar = () => {
             <Link
               to="/"
               className={`text-sm font-medium ${
-                location.pathname === "/" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                location.pathname === "/"
+                  ? "text-green-600"
+                  : "text-gray-600 hover:text-green-600"
               }`}
             >
               Home
@@ -41,7 +40,9 @@ const Navbar = () => {
             <Link
               to="/services"
               className={`text-sm font-medium ${
-                location.pathname === "/services" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                location.pathname === "/services"
+                  ? "text-green-600"
+                  : "text-gray-600 hover:text-green-600"
               }`}
             >
               Services
@@ -49,7 +50,9 @@ const Navbar = () => {
             <Link
               to="/about"
               className={`text-sm font-medium ${
-                location.pathname === "/about" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                location.pathname === "/about"
+                  ? "text-green-600"
+                  : "text-gray-600 hover:text-green-600"
               }`}
             >
               About
@@ -61,7 +64,9 @@ const Navbar = () => {
                 <Link
                   to="/profile"
                   className={`text-sm font-medium ${
-                    location.pathname === "/profile" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                    location.pathname === "/profile"
+                      ? "text-green-600"
+                      : "text-gray-600 hover:text-green-600"
                   }`}
                 >
                   Profile
@@ -100,9 +105,18 @@ const Navbar = () => {
             className="md:hidden p-2"
           >
             <div className="w-6 h-5 flex flex-col justify-between">
-              <motion.div animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }} className="w-full h-0.5 bg-gray-600 origin-left" />
-              <motion.div animate={isOpen ? { opacity: 0 } : { opacity: 1 }} className="w-full h-0.5 bg-gray-600" />
-              <motion.div animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }} className="w-full h-0.5 bg-gray-600 origin-left" />
+              <motion.div
+                animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                className="w-full h-0.5 bg-gray-600 origin-left"
+              />
+              <motion.div
+                animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+                className="w-full h-0.5 bg-gray-600"
+              />
+              <motion.div
+                animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                className="w-full h-0.5 bg-gray-600 origin-left"
+              />
             </div>
           </motion.button>
         </div>
@@ -120,7 +134,9 @@ const Navbar = () => {
                 <Link
                   to="/"
                   className={`block px-4 py-2 text-sm font-medium ${
-                    location.pathname === "/" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                    location.pathname === "/"
+                      ? "text-green-600"
+                      : "text-gray-600 hover:text-green-600"
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -129,7 +145,9 @@ const Navbar = () => {
                 <Link
                   to="/services"
                   className={`block px-4 py-2 text-sm font-medium ${
-                    location.pathname === "/services" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                    location.pathname === "/services"
+                      ? "text-green-600"
+                      : "text-gray-600 hover:text-green-600"
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -138,7 +156,9 @@ const Navbar = () => {
                 <Link
                   to="/about"
                   className={`block px-4 py-2 text-sm font-medium ${
-                    location.pathname === "/about" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                    location.pathname === "/about"
+                      ? "text-green-600"
+                      : "text-gray-600 hover:text-green-600"
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -151,7 +171,9 @@ const Navbar = () => {
                     <Link
                       to="/profile"
                       className={`block px-4 py-2 text-sm font-medium ${
-                        location.pathname === "/profile" ? "text-green-600" : "text-gray-600 hover:text-green-600"
+                        location.pathname === "/profile"
+                          ? "text-green-600"
+                          : "text-gray-600 hover:text-green-600"
                       }`}
                       onClick={() => setIsOpen(false)}
                     >

@@ -1,3 +1,4 @@
+import authServices from "@/services/authServices";
 import { createContext, useState, useEffect } from "react";
 
 const initialValue = {
@@ -19,7 +20,8 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  const removeUser = () => {
+  const removeUser = async () => {
+    await authServices.logout();
     setUser(null);
     localStorage.removeItem("user");
   };

@@ -4,64 +4,37 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
 import { userContext } from "@/context/userContext";
 import { availabilityStatus, quantityUnits } from "@/lib/utils";
 import { productServices } from "@/services/productServices";
 import { storageServices } from "@/services/storageServices";
 import { useContext, useEffect, useState } from "react";
-import { Camera, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, UploadCloud } from "lucide-react";
 
 const AddProduct = () => {
   const [files, setFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState({});
-  const [currentStep, setCurrentStep] = useState(1);
+  const [permanentUrls, setPermanentUrls] = useState([]);
+  const [negotiable, setNegotiable] = useState(false);
+  const [title, setTitle] = useState("");
+  const [sellingPrice, setSellingPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [quantityUnit, setQuantityUnit] = useState(quantityUnits.KILOGRAM);
+  const [status, setStatus] = useState(availabilityStatus.AVAILABLE);
+  const [description, setDescription] = useState("");
   const { user } = useContext(userContext);
-
-  const [formData, setFormData] = useState({
-    title: "",
-    sellingPrice: "",
-    negotiable: false,
-    quantity: "",
-    quantityUnit: quantityUnits.KILOGRAM,
-    status: availabilityStatus.AVAILABLE,
-    description: "",
-    media: [],
-  });
-
-  const steps = [
-    { number: 1, title: "Basic Details" },
-    { number: 2, title: "Product Specifications" },
-    { number: 3, title: "Images & Preview" },
-  ];
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSwitchChange = (name, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const [step, setStep] = useState(1);
 
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
     if (selectedFiles.length === 0) return;
-
     setFiles(selectedFiles);
     const imagePreviews = selectedFiles
       .filter((file) => file.type.startsWith("image/"))
       .map((file) => URL.createObjectURL(file));
     setPreviewUrls(imagePreviews);
-
     const initialProgress = {};
     selectedFiles.forEach((file) => {
       initialProgress[file.name] = 0;
@@ -69,7 +42,7 @@ const AddProduct = () => {
     setUploadProgress(initialProgress);
   };
 
-  const handleSubmit = async () => {
+  const handleAddProduct = async () => {
     if (files.length === 0) {
       alert("Please select at least one image.");
       return;
@@ -109,32 +82,30 @@ const AddProduct = () => {
         }
       }
 
-      const finalFormData = {
-        userId: user.$id,
-        ...formData,
-        sellingPrice: parseInt(formData.sellingPrice),
-        quantity: parseInt(formData.quantity),
+      const data = {
+        userId: user?.$id,
+        title,
+        sellingPrice: parseInt(sellingPrice),
+        quantity: parseInt(quantity),
+        description,
         media: uploaded,
+        availabilityStatus: status,
+        negotiable,
       };
 
-      await productServices.addProduct({ product: finalFormData });
+      console.log("Product data:", data);
 
-      // Reset form
+      await productServices.addProduct({ product: data });
+
       setFiles([]);
       previewUrls.forEach((url) => URL.revokeObjectURL(url));
       setPreviewUrls([]);
       setUploadProgress({});
-      setFormData({
-        title: "",
-        sellingPrice: "",
-        negotiable: false,
-        quantity: "",
-        quantityUnit: quantityUnits.KILOGRAM,
-        status: availabilityStatus.AVAILABLE,
-        description: "",
-        media: [],
-      });
-      setCurrentStep(1);
+      setPermanentUrls([]);
+      setTitle("");
+      setSellingPrice("");
+      setQuantity("");
+      setDescription("");
     } catch (error) {
       console.error("Error adding product:", error);
       alert("Failed to add product. Please try again.");
@@ -157,314 +128,295 @@ const AddProduct = () => {
   }, [previewUrls]);
 
   const nextStep = () => {
-    setCurrentStep((prev) => prev + 1);
+    setStep((prevStep) => prevStep + 1);
   };
 
   const prevStep = () => {
-    setCurrentStep((prev) => prev - 1);
+    setStep((prevStep) => prevStep - 1);
   };
 
-  const renderStepIndicator = () => (
-    <div className="flex justify-between mb-8">
-      {steps.map((step, idx) => (
-        <div key={step.number} className="flex items-center">
-          <div
-            className={`flex items-center justify-center w-10 h-10 rounded-full border-2 
-              ${
-                currentStep >= step.number
-                  ? "border-emerald-600 bg-emerald-600 text-white"
-                  : "border-gray-300 text-gray-500"
-              }`}
-          >
-            {currentStep > step.number ? (
-              <Check className="w-6 h-6" />
-            ) : (
-              step.number
-            )}
-          </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium text-gray-900">{step.title}</p>
-          </div>
-          {idx < steps.length - 1 && (
-            <div
-              className={`h-0.5 w-12 mx-4 ${
-                currentStep > step.number ? "bg-emerald-600" : "bg-gray-300"
-              }`}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-
   const renderStep = () => {
-    switch (currentStep) {
+    switch (step) {
       case 1:
         return (
-          <Card className="border-none shadow-none">
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="title" className="text-base font-semibold">
-                  Product Title
-                </Label>
-                <Input
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  placeholder="Enter a descriptive title for your product"
-                  className="w-full"
-                />
-              </div>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="title" className="text-gray-700 font-medium">
+                Product Title
+              </Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter product title"
+                className="w-full bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              />
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="sellingPrice"
-                    className="text-base font-semibold"
-                  >
-                    Selling Price (₹)
-                  </Label>
-                  <Input
-                    id="sellingPrice"
-                    name="sellingPrice"
-                    type="number"
-                    value={formData.sellingPrice}
-                    onChange={handleInputChange}
-                    placeholder="Enter price in rupees"
-                    className="w-full"
+            <div className="space-y-2">
+              <Label htmlFor="price" className="text-gray-700 font-medium">
+                Selling Price (₹) for complete quantity
+              </Label>
+              <Input
+                id="price"
+                type="number"
+                value={sellingPrice}
+                onChange={(e) => setSellingPrice(e.target.value)}
+                placeholder="Enter selling price"
+                min="0"
+                className="w-full bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="negotiable"
+                checked={negotiable}
+                onCheckedChange={(e) => setNegotiable(e)}
+                className="data-[state=checked]:bg-emerald-500"
+              />
+              <Label htmlFor="negotiable" className="text-gray-700 font-medium">
+                Price Negotiable
+              </Label>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="quantity" className="text-gray-700 font-medium">
+                Quantity Available
+              </Label>
+              <Input
+                id="quantity"
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                placeholder="Enter available quantity"
+                min="0"
+                className="w-full bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-gray-700 font-medium">Availability</Label>
+              <RadioGroup
+                defaultValue={availabilityStatus.AVAILABLE}
+                onValueChange={(e) => setStatus(e)}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={availabilityStatus.AVAILABLE}
+                    id="available"
+                    className="text-emerald-500 border-gray-300"
                   />
+                  <Label htmlFor="available">Available</Label>
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="quantity" className="text-base font-semibold">
-                    Available Quantity
-                  </Label>
-                  <Input
-                    id="quantity"
-                    name="quantity"
-                    type="number"
-                    value={formData.quantity}
-                    onChange={handleInputChange}
-                    placeholder="Enter available quantity"
-                    className="w-full"
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={availabilityStatus.SOLD}
+                    id="sold"
+                    className="text-emerald-500 border-gray-300"
                   />
+                  <Label htmlFor="sold">Sold</Label>
                 </div>
-              </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={availabilityStatus.PROCESSING}
+                    id="processing"
+                    className="text-emerald-500 border-gray-300"
+                  />
+                  <Label htmlFor="processing">Processing</Label>
+                </div>
+              </RadioGroup>
+            </div>
 
-              <div className="space-y-2">
-                <Label
-                  htmlFor="description"
-                  className="text-base font-semibold"
-                >
-                  Product Description
-                </Label>
-                <Textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  placeholder="Describe your product in detail"
-                  className="min-h-[120px]"
-                />
-              </div>
-            </CardContent>
-          </Card>
+            <div className="space-y-2">
+              <Label className="text-gray-700 font-medium">Quantity Unit</Label>
+              <RadioGroup
+                defaultValue={quantityUnits.KILOGRAM}
+                onValueChange={(e) => setQuantityUnit(e)}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={quantityUnits.KILOGRAM}
+                    id="kg"
+                    className="text-emerald-500 border-gray-300"
+                  />
+                  <Label htmlFor="kg">kg</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={quantityUnits.LITRES}
+                    id="ltr"
+                    className="text-emerald-500 border-gray-300"
+                  />
+                  <Label htmlFor="ltr">ltr</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="description"
+                className="text-gray-700 font-medium"
+              >
+                Product Description
+              </Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter product description"
+                className="w-full min-h-[120px] bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              />
+            </div>
+
+            <button
+              onClick={nextStep}
+              className="mt-8 w-full bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center"
+            >
+              Next <ChevronRight className="ml-2 h-4 w-4" />
+            </button>
+          </div>
         );
 
       case 2:
         return (
-          <Card className="border-none shadow-none">
-            <CardContent className="space-y-8">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <Label className="text-gray-700 font-medium">
+                Product Images
+              </Label>
+              <label className="block w-full bg-emerald-600 text-white px-4 py-2 rounded-lg cursor-pointer text-center hover:bg-emerald-700 transition-colors flex items-center justify-center">
+                <UploadCloud className="mr-2 h-4 w-4" />
+                Select Images
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept="image/*"
+                />
+              </label>
+            </div>
+
+            {files.length > 0 && (
               <div className="space-y-4">
-                <Label className="text-base font-semibold">Quantity Unit</Label>
-                <RadioGroup
-                  value={formData.quantityUnit}
-                  onValueChange={(value) =>
-                    handleSwitchChange("quantityUnit", value)
-                  }
-                  className="grid grid-cols-2 gap-4"
-                >
-                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-gray-50">
-                    <RadioGroupItem value={quantityUnits.KILOGRAM} id="kg" />
-                    <Label htmlFor="kg" className="font-medium">
-                      Kilogram (kg)
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-gray-50">
-                    <RadioGroupItem value={quantityUnits.LITRES} id="ltr" />
-                    <Label htmlFor="ltr" className="font-medium">
-                      Liters (L)
-                    </Label>
-                  </div>
-                </RadioGroup>
-              </div>
-
-              <div className="space-y-4">
-                <Label className="text-base font-semibold">
-                  Availability Status
-                </Label>
-                <RadioGroup
-                  value={formData.status}
-                  onValueChange={(value) => handleSwitchChange("status", value)}
-                  className="grid grid-cols-1 gap-4"
-                >
-                  {Object.values(availabilityStatus).map((status) => (
-                    <div
-                      key={status}
-                      className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-gray-50"
-                    >
-                      <RadioGroupItem
-                        value={status}
-                        id={status.toLowerCase()}
-                      />
-                      <Label
-                        htmlFor={status.toLowerCase()}
-                        className="font-medium"
-                      >
-                        {status}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="negotiable"
-                    checked={formData.negotiable}
-                    onCheckedChange={(checked) =>
-                      handleSwitchChange("negotiable", checked)
-                    }
-                  />
-                  <Label htmlFor="negotiable" className="font-medium">
-                    Price is Negotiable
-                  </Label>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      case 3:
-        return (
-          <Card className="border-none shadow-none">
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <Camera className="w-12 h-12 text-gray-400 mb-4" />
-                      <p className="mb-2 text-sm text-gray-500">
-                        <span className="font-semibold">Click to upload</span>{" "}
-                        or drag and drop
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG or JPEG (MAX. 800x400px)
-                      </p>
-                    </div>
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleFileChange}
-                      className="hidden"
-                      accept="image/*"
-                    />
-                  </label>
-                </div>
-
-                {files.length > 0 && (
-                  <div className="space-y-4">
-                    {files.map((file, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-600">{file.name}</span>
-                          <span
-                            className={`
-                            ${
-                              uploadProgress[file.name] === 100
-                                ? "text-green-600"
-                                : ""
-                            }
-                            ${
-                              uploadProgress[file.name] === -1
-                                ? "text-red-600"
-                                : ""
-                            }
-                            ${
-                              uploadProgress[file.name] > 0 &&
-                              uploadProgress[file.name] < 100
-                                ? "text-emerald-600"
-                                : ""
-                            }
-                          `}
-                          >
-                            {getProgressStatus(uploadProgress[file.name])}
-                          </span>
-                        </div>
-                        <Progress
-                          value={
-                            uploadProgress[file.name] === -1
-                              ? 0
-                              : uploadProgress[file.name]
+                {files.map((file, index) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">{file.name}</span>
+                      <span
+                        className={`
+                          ${
+                            uploadProgress[file.name] === 100
+                              ? "text-green-600"
+                              : ""
                           }
-                          className={`h-2 ${
-                            uploadProgress[file.name] === -1 ? "bg-red-200" : ""
-                          }`}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {previewUrls.length > 0 && (
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-gray-900">
-                      Image Previews
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {previewUrls.map((url, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={url}
-                            alt={`Preview ${index + 1}`}
-                            className="w-full h-40 object-cover rounded-lg border"
-                          />
-                          <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                            <button
-                              onClick={() => {
-                                const newFiles = [...files];
-                                const newUrls = [...previewUrls];
-                                newFiles.splice(index, 1);
-                                newUrls.splice(index, 1);
-                                setFiles(newFiles);
-                                setPreviewUrls(newUrls);
-                              }}
-                              className="text-white hover:text-red-400"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+                          ${
+                            uploadProgress[file.name] === -1
+                              ? "text-red-600"
+                              : ""
+                          }
+                          ${
+                            uploadProgress[file.name] > 0 &&
+                            uploadProgress[file.name] < 100
+                              ? "text-emerald-600"
+                              : ""
+                          }
+                        `}
+                      >
+                        {getProgressStatus(uploadProgress[file.name])}
+                      </span>
                     </div>
+                    <Progress
+                      value={
+                        uploadProgress[file.name] === -1
+                          ? 0
+                          : uploadProgress[file.name]
+                      }
+                      className={`h-2 ${
+                        uploadProgress[file.name] === -1 ? "bg-red-200" : ""
+                      }`}
+                    />
                   </div>
-                )}
+                ))}
               </div>
-            </CardContent>
-          </Card>
+            )}
+
+            {previewUrls.length > 0 && (
+              <div>
+                <p className="text-sm text-gray-600 mb-2">Image Previews:</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {previewUrls.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`Preview ${index}`}
+                      className="w-full h-24 object-cover rounded-lg border border-gray-200"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-between mt-8">
+              <button
+                onClick={prevStep}
+                className="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
+              >
+                <ChevronLeft className="mr-2 h-4 w-4" />
+                Previous
+              </button>
+              <button
+                onClick={handleAddProduct}
+                disabled={
+                  uploading ||
+                  !title ||
+                  !sellingPrice ||
+                  !quantity ||
+                  !description ||
+                  files.length === 0
+                }
+                className="bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:hover:bg-emerald-600 flex items-center justify-center"
+              >
+                {uploading ? "Adding Product..." : "Add Product"}
+              </button>
+            </div>
+          </div>
         );
 
       default:
         return null;
     }
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-8 border border-green-100 mt-4">
           <h2 className="text-3xl font-bold text-gray-800 mb-8">Add Product</h2>
+          <div className="mb-6">
+            <div className="flex items-center justify-center space-x-4">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  step === 1
+                    ? "bg-emerald-600 text-white"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+              >
+                1
+              </div>
+              <div className="h-1 w-16 bg-gray-200 rounded-full"></div>
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  step === 2
+                    ? "bg-emerald-600 text-white"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+              >
+                2
+              </div>
+            </div>
+          </div>
           {renderStep()}
         </div>
       </div>

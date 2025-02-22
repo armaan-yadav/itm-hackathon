@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { MessageCircle, X } from "lucide-react";
 
-// Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
@@ -21,7 +20,7 @@ const ChatWidget = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, displayText]); // Scroll when messages or display text updates
+  }, [messages, displayText]);
 
   useEffect(() => {
     if (isOpen) {
@@ -29,7 +28,6 @@ const ChatWidget = () => {
     }
   }, [isOpen]);
 
-  // Typewriter effect
   useEffect(() => {
     if (currentTypingIndex >= 0 && currentTypingIndex < messages.length) {
       const message = messages[currentTypingIndex];
@@ -41,20 +39,19 @@ const ChatWidget = () => {
           if (index < text.length) {
             setDisplayText(text.substring(0, index + 1));
             index++;
-            // Adjust speed based on character type for more natural typing
+
             const delay =
               text[index] === "\n"
-                ? 400 // Longer pause at line breaks
+                ? 400
                 : text[index] === "."
-                ? 300 // Pause at periods
+                ? 300
                 : text[index] === ","
-                ? 200 // Slight pause at commas
-                : 25; // Normal typing speed
+                ? 200
+                : 25;
             setTimeout(typeNextCharacter, delay);
           } else {
-            // Add a small delay before marking as complete
             setTimeout(() => {
-              setCurrentTypingIndex(-1); // Done typing
+              setCurrentTypingIndex(-1);
             }, 500);
           }
         };
@@ -111,7 +108,7 @@ const ChatWidget = () => {
 
     try {
       setLoading(true);
-      // Add user message
+
       const userMessage = {
         id: messages.length + 1,
         text: newMessage,
@@ -121,7 +118,6 @@ const ChatWidget = () => {
       setMessages((prev) => [...prev, userMessage]);
       setNewMessage("");
 
-      // Get response from Gemini with formatting instructions
       const result = await model.generateContent(
         [
           "You are an AI assistant for Kisan Sarthi, an agricultural platform. Format your response clearly using:",
@@ -154,7 +150,6 @@ const ChatWidget = () => {
       setCurrentTypingIndex(messages.length + 1);
     } catch (error) {
       console.error("Error sending message:", error);
-      //   toast.error("Failed to get response from AI");
     } finally {
       setLoading(false);
     }
@@ -185,7 +180,6 @@ const ChatWidget = () => {
             </div>
           </div>
 
-          {/* Messages Container */}
           <div className="h-[400px] overflow-y-auto p-4 space-y-4">
             {messages.map((message, index) => (
               <div
@@ -228,10 +222,9 @@ const ChatWidget = () => {
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} /> {/* Scroll anchor */}
+            <div ref={messagesEndRef} />
           </div>
 
-          {/* Message Input */}
           <div className="p-4 border-t border-gray-200">
             <form onSubmit={handleSendMessage} className="flex gap-2">
               <input

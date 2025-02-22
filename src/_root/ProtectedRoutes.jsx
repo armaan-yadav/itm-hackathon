@@ -6,7 +6,6 @@ const ProtectedRoute = () => {
   const { user } = useContext(userContext);
 
   if (!user) {
-    // Redirect to login if not authenticated
     return <Navigate to="/auth" replace />;
   }
 
